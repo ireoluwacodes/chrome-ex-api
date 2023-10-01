@@ -20,7 +20,6 @@ const createVideo = expressAsyncHandler(async (req, res) => {
 
     let name = `New Recording ${allVideos.length + 1}`;
     let filePath = path.join(__dirname, `/videos/${name}.webm`);
-    fs.openSync(filePath, 'w');
     const newVideo = await Video.create({
       name,
       path: filePath,
