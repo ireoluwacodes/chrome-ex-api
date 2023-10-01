@@ -97,7 +97,7 @@ const completeVideo = expressAsyncHandler(async (req, res) => {
 
 const getVideo = expressAsyncHandler(async (req, res) => {
 try {
-  const {id} = req.body
+  const {id} = req.params
   const myVideo = await Video.findById(id)
   
   res.writeHead(200, {

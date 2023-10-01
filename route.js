@@ -5,13 +5,13 @@ const Router = express.Router()
 
 Router.route("/").get(Home)
 
-Router.route("/api").post(createVideo)
+Router.route("/api/create").post(createVideo)
 
-Router.route("/api").post(appendVideo)
+Router.route("/api/append").post(appendVideo)
 
-Router.route("/api").post(completeVideo)
+Router.route("/api/complete").post(completeVideo)
 
-Router.route("/api").post(getVideo)
+Router.route("/api/:id").post(getVideo)
 
 export {
     Router
