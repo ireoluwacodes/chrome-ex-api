@@ -12,7 +12,7 @@ mongoose.Promise = global.Promise;
 
 const selectDB = () => {
   if (process.env.NODE_ENV == "production") {
-    return process.env.MONGO_URL;
+    return process.env.MONGO_URI;
   }
   return process.env.LOCAL_MONGO_URL;
 };
