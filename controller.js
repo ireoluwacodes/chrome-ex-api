@@ -1,8 +1,8 @@
 import expressAsyncHandler from "express-async-handler";
-import fs from "fs";
+import fs, {createReadStream} from "fs";
 import amqp from "amqplib";
 import path from "path";
-import { Video } from "./model";
+import { Video } from "./model.js";
 
 const Home = expressAsyncHandler(async (req, res) => {
   return res.status(200).json({
@@ -37,7 +37,7 @@ const appendVideo = expressAsyncHandler(async (req, res) => {
       throw new Error("invalid parameters");
     }
     const myVideo = await Video.findById(id);
-    const dataBuffer = new Buffer(data, "base64");
+    const dataBuffer = Buffer.from(data, "base64");
     let path = myVideo.path;
     const fileStream = fs.createWriteStream(path, { flags: "a" });
     fileStream.write(dataBuffer);
@@ -100,10 +100,10 @@ try {
   const {id} = req.body
   const myVideo = await Video.findById(id)
   
-  return res.status(200).json({
-    status: true,
-    message: "success",
-  });
+  res.writeHead(200, {
+    'Content-Type' : 'video/mp4'
+  })
+  createReadStream(myVideo.path).pipe(res)
 } catch (error) {
   throw new Error(error)
 }
