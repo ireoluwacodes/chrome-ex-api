@@ -36,10 +36,10 @@ const createVideo = expressAsyncHandler(async (req, res) => {
 const appendVideo = expressAsyncHandler(async (req, res) => {
   try {
     const { id, data } = req.body;
-    // if (!id || !data) {
-    //   res.status(400);
-    //   throw new Error("invalid parameters");
-    // }
+    if (!id || !data) {
+      res.status(400);
+      throw new Error("invalid parameters");
+    }
     console.log(req.body)
     const myVideo = await Video.findById(id);
     const dataBuffer = Buffer.from(data, "base64");
