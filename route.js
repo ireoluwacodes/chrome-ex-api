@@ -11,7 +11,7 @@ Router.route("/api/append").post(appendVideo)
 
 Router.route("/api/complete").post(completeVideo)
 
-Router.route("/api/:id").get(getVideo)
+Router.route("/api").get(getVideo)
 
 export {
     Router

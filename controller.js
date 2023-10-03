@@ -40,7 +40,7 @@ const appendVideo = expressAsyncHandler(async (req, res) => {
       res.status(400);
       throw new Error("invalid parameters");
     }
-    console.log(req.body)
+    console.log(req.body);
     const myVideo = await Video.findById(id);
     const dataBuffer = Buffer.from(data, "base64");
     let path = myVideo.path;
@@ -58,7 +58,15 @@ const appendVideo = expressAsyncHandler(async (req, res) => {
 const completeVideo = expressAsyncHandler(async (req, res) => {
   try {
     const { id } = req.body;
-    let myVideo = await Video.findById(id);
+    let myVideo = await Video.findByIdAndUpdate(
+      id,
+      {
+        status: true,
+      },
+      {
+        new: true,
+      }
+    );
     let path = myVideo.path;
     let video = fs.readFileSync(path, (err, data) => {
       if (err) {
@@ -100,13 +108,19 @@ const completeVideo = expressAsyncHandler(async (req, res) => {
 
 const getVideo = expressAsyncHandler(async (req, res) => {
   try {
-    const { id } = req.params;
-    const myVideo = await Video.findById(id);
-
+    const myVideo = (await Video.find({}).sort({ createdAt: -1 })).filter(
+      (video) => {
+        return video.status == true;
+      }
+    );
+    if (myVideo.length < 1) {
+      res.status(400);
+      throw new Error("No successfully uploaded video");
+    }
     res.writeHead(200, {
       "Content-Type": "video/mp4",
     });
-    createReadStream(myVideo.path).pipe(res);
+    createReadStream(myVideo[0].path).pipe(res);
   } catch (error) {
     throw new Error(error);
   }
